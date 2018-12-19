@@ -1,11 +1,17 @@
 <xml>
     <set name="NATIVE_TOOLKIT_PATH" value="${LINC_SDL_PATH}/lib/" />
     <set name="NATIVE_TOOLKIT_SDL_STATIC" value="1" if="android"/>
+
+    <set name="NATIVE_TOOLKIT_SDL_X11_XINPUT2" value="1"/>
+    <echo value="Hello from linc_sdl.xml ${NATIVE_TOOLKIT_SDL_X11_XINPUT2}"/>
+
     <include name="${LINC_SDL_PATH}/lib/sdl/files.xml"/>
 
     <set name="MACOSX_DEPLOYMENT_TARGET" value="10.6" if="mac" unless="MACOSX_DEPLOYMENT_TARGET"/>
 
     <files id='haxe'>
+
+        <set name="NATIVE_TOOLKIT_SDL_X11_XINPUT2" value="1"/>
 
         <compilerflag value='-DLINC_SDL'/>
         <compilerflag value='-DLINC_SDL_WITH_SDL_MAIN'                               if="android"/>
@@ -28,6 +34,8 @@
     </files>
 
     <files id="__main__">
+        <set name="NATIVE_TOOLKIT_SDL_X11_XINPUT2" value="1"/>
+
         <compilerflag value='-I${LINC_SDL_PATH}/linc/'/>
         <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/'/>
         <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/default/'    unless='windows || mac || linux'/>
@@ -37,6 +45,8 @@
     </files>
 
     <target id="haxe">
+
+        <set name="NATIVE_TOOLKIT_SDL_X11_XINPUT2" value="1"/>
 
             <!-- include sdl library code into the build -->
         <files id="native-toolkit-sdl" unless="linc_sdl_prebuilt"/>
