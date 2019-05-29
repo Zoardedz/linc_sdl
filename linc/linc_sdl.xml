@@ -1,29 +1,31 @@
 <xml>
     <set name="NATIVE_TOOLKIT_PATH" value="${LINC_SDL_PATH}/lib/" />
     <set name="NATIVE_TOOLKIT_SDL_STATIC" value="1" if="android"/>
+    <set name="linc_sdl_static" value="1" unless="linux"/>
 
-    <set name="NATIVE_TOOLKIT_SDL_X11_XINPUT2" value="1"/>
-    <echo value="Hello from linc_sdl.xml ${NATIVE_TOOLKIT_SDL_X11_XINPUT2}"/>
-
-    <include name="${LINC_SDL_PATH}/lib/sdl/files.xml"/>
+    <include name="${LINC_SDL_PATH}/lib/sdl/files.xml" if="linc_sdl_static"/>
 
     <set name="MACOSX_DEPLOYMENT_TARGET" value="10.6" if="mac" unless="MACOSX_DEPLOYMENT_TARGET"/>
 
     <files id='haxe'>
 
-        <set name="NATIVE_TOOLKIT_SDL_X11_XINPUT2" value="1"/>
-
         <compilerflag value='-DLINC_SDL'/>
-        <compilerflag value='-DLINC_SDL_WITH_SDL_MAIN'                               if="android"/>
-
+        <compilerflag value='-DLINC_SDL_WITH_SDL_MAIN' if="android"/>
         <compilerflag value='-I${LINC_SDL_PATH}/linc/'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/default/'    unless='windows || mac || linux'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/linux/'      if='linux'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/windows/'    if='windows'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/mac/'        if='mac'/>
 
-        <include name="${LINC_SDL_PATH}/lib/sdl/defines.xml" />
+        <section if='linc_sdl_static'>
+            <include name="${LINC_SDL_PATH}/lib/sdl/defines.xml"/>
+
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/'/>
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/default/'    unless='windows || mac || linux'/>
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/linux/'      if='linux'/>
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/windows/'    if='windows'/>
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/mac/'        if='mac'/>
+        </section>
+
+        <section unless='linc_sdl_static'>
+            <compilerflag value="-I/usr/include/SDL2" if="linux"/>
+        </section>
 
         <file name='${LINC_SDL_PATH}/linc/linc_sdl.cpp' />
 
@@ -34,26 +36,32 @@
     </files>
 
     <files id="__main__">
-        <set name="NATIVE_TOOLKIT_SDL_X11_XINPUT2" value="1"/>
-
         <compilerflag value='-I${LINC_SDL_PATH}/linc/'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/default/'    unless='windows || mac || linux'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/linux/'      if='linux'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/windows/'    if='windows'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/mac/'        if='mac'/>
+
+        <section if='linc_sdl_static'>            
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/'/>
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/default/'    unless='windows || mac || linux'/>
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/linux/'      if='linux'/>
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/windows/'    if='windows'/>
+            <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/mac/'        if='mac'/>
+        </section>
+        <section unless='linc_sdl_static'>
+            <compilerflag value="-I/usr/include/SDL2" if="linux"/>
+        </section>
     </files>
 
     <target id="haxe">
 
-        <set name="NATIVE_TOOLKIT_SDL_X11_XINPUT2" value="1"/>
-
             <!-- include sdl library code into the build -->
-        <files id="native-toolkit-sdl" unless="linc_sdl_prebuilt"/>
+        <files id="native-toolkit-sdl" if='linc_sdl_static' unless="linc_sdl_prebuilt"/>
 
             <!-- You could `haxelib run hxcpp library.xml -Dstatic_link` from lib/sdl/ -->
             <!-- and statically link the library using something like the line below -->
         <!-- <lib name="${LINC_SDL_PATH}/lib/sdl/lib/${BINDIR}/libsdl${LIBEXTRA}.a" if="linc_sdl_prebuilt"/> -->
+
+        <section if='linux'>
+            <lib name="-lSDL2" unless="linc_sdl_static"/>
+        </section>
 
         <section if="mac">
             <vflag name="-l" value="iconv"/>
@@ -95,7 +103,7 @@
             <lib name="-lGLESv2" />
             <lib name="-lGLESv1_CM" />
             <lib name="-lOpenSLES" />
-         </section> <!-- android -->
+         </section>
 
     </target>
 </xml>
