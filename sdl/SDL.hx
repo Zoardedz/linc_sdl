@@ -1175,6 +1175,12 @@ extern class SDL {
     @:native('linc::sdl::GL_GetAttribute')
     static function GL_GetAttribute(attr:SDLGLAttr) : Int;
 
+    @:native('SDL_GL_GetProcAddress')
+    static function GL_GetProcAddress(_proc : cpp.ConstCharStar) : cpp.Star<cpp.Void>;
+
+    @:native('SDL_GL_LoadLibrary')
+    static function GL_LoadLibrary(_path : cpp.ConstCharStar) : Int;
+
 //SDL_system.h
 
     #if (ios || tvos)
