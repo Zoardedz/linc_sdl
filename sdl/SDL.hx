@@ -594,14 +594,13 @@ extern class SDL {
 //SDL_clipboard.h
 
     @:native('SDL_GetClipboardText')
-    private static function _getClipboardText() : cpp.ConstCharStar;
-    static inline function getClipboardText() : String return cast _getClipboardText();
+    static function getClipboardText() : cpp.ConstCharStar;
 
     @:native('SDL_HasClipboardText')
     static function hasClipboardText():Bool;
 
     @:native('SDL_SetClipboardText')
-    static function setClipboardText(text:String):Int;
+    static function setClipboardText(text:cpp.ConstCharStar):Int;
 
 
 //SDL_keyboard.h
