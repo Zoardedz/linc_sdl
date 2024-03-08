@@ -128,11 +128,7 @@ class Keycodes {
             case Keycodes.delete:    return Scancodes.name(Scancodes.delete);
 
             default: {
-
-                var decoder = new haxe.Utf8();
-                    decoder.addChar(keycode);
-
-                return decoder.toString();
+                return new UnicodeString(String.fromCharCode(keycode)).toString();
 
             } //default
 
