@@ -12,7 +12,27 @@ import sdl.GLContext;
 import sdl.Thread;
 import sdl.RWops;
 import sdl.Haptic;
+import cpp.ConstCharStar;
+import cpp.Star;
+import sdl.SDL.MouseHelper.sdl_button;
 
+enum abstract MouseButton(Int) from Int to Int {
+    var SDL_BUTTON_LEFT:MouseButton =     1;
+    var SDL_BUTTON_MIDDLE:MouseButton =   2;
+    var SDL_BUTTON_RIGHT:MouseButton =    3;
+    var SDL_BUTTON_X1:MouseButton =       4;
+    var SDL_BUTTON_X2:MouseButton =       5;
+    var SDL_BUTTON_LMASK:MouseButton =    sdl_button(SDL_BUTTON_LEFT);
+    var SDL_BUTTON_MMASK:MouseButton =    sdl_button(SDL_BUTTON_MIDDLE);
+    var SDL_BUTTON_RMASK:MouseButton =    sdl_button(SDL_BUTTON_RIGHT);
+    var SDL_BUTTON_X1MASK:MouseButton =   sdl_button(SDL_BUTTON_X1);
+    var SDL_BUTTON_X2MASK:MouseButton =   sdl_button(SDL_BUTTON_X2);
+}
+
+@:allow(MouseButton)
+private class MouseHelper {
+    public static inline function sdl_button(x:Int):Int return (1 << ((x)-1));
+}
 
 @:keep
 @:allow(sdl.SDL)
@@ -137,6 +157,34 @@ extern class SDL {
 
     @:native('linc::sdl::waitEventTimeout')
     static function waitEventTimeout(timeout_ms:Int) : sdl.Event;
+
+//SDL_video.h
+    @:native('SDL_GetWindowDisplayIndex')
+    static function getWindowDisplayIndex(window:Window):Int;
+
+    @:native('SDL_VideoInit')
+    static function videoInit(driver_name:ConstCharStar):Int;
+
+    @:native('SDL_VideoQuit')
+    static function videoQuit():Void;
+
+    @:native('SDL_GetVideoDriver')
+    static function getVideoDriver(index:Int):ConstCharStar;
+
+    @:native('SDL_GetCurrentVideoDriver')
+    static function getCurrentVideoDriver():ConstCharStar;
+
+    @:native('SDL_GetNumVideoDisplays')
+    static function numberOfVidDisplays():Int;
+
+    @:native('SDL_GetDisplayDPI')
+    static function getDisplayDPI(displayIndex:Int, ddpi:Star<Float>, hdpi:Star<Float>, vdpi:Star<Float>):Int;
+
+    @:native('SDL_GetWindowPixelFormat')
+    static function getWindowPixelFormat(window:Window):cpp.UInt32;
+
+    @:native('SDL_GetNumVideoDrivers')
+    static function videoDriversLength():Int;
 
 //SDL_error.h
 
@@ -1066,6 +1114,9 @@ extern class SDL {
 
     @:native('SDL_ShowSimpleMessageBox')
     static function showSimpleMessageBox(flags:SDLMessageBoxFlags, title:String, message:String, window:Window):Void;
+
+    @:native('SDL_ShowMessageBox')
+    static function ShowMessageBox(messageBoxData:cpp.ConstStar<sdl.MessageBox.SDL_MessageBoxData>, buttonId:cpp.Star<Int>):Int;
 
     @:native('SDL_GetWindowID')
     static function getWindowID(window:Window):UInt;
