@@ -1,4 +1,4 @@
-# linc/SDL
+# linc/SDL (MYZTIC FORK)
 Haxe/hxcpp @:native bindings for [SDL](https://wiki.libsdl.org/).
 
 This is a [linc](http://snowkit.github.io/linc/) library.
@@ -10,7 +10,7 @@ This library works with the Haxe cpp target only.
 ---
 ### Install
 
-`haxelib git linc_sdl https://github.com/snowkit/linc_sdl.git`
+`haxelib git linc_sdl https://github.com/Zoardedz/linc_sdl.git`
 
 If you run into SDL build errors first try:
 
@@ -20,7 +20,7 @@ If you run into SDL build errors first try:
 
 ### Reporting errors
 
-If you run into any issues compiling or using a function, [please report it](https://github.com/snowkit/linc_sdl/issues/new) since there are many endpoints, there are inevitably places with minor oversight. Thanks!
+If you run into any issues compiling or using a function, [please report it](https://github.com/Zoardedz/linc_sdl/issues/new) since there are many endpoints, there are inevitably places with minor oversight. Thanks!
 
 ### Example usage
 
